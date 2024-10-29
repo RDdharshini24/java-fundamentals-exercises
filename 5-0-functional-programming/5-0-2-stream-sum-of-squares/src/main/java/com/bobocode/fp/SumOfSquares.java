@@ -1,58 +1,34 @@
 package com.bobocode.fp;
 
 import com.bobocode.fp.exception.InvalidRangeException;
-import org.junit.jupiter.api.MethodOrderer;
-import org.junit.jupiter.api.Order;
-import org.junit.jupiter.api.Test;
-import org.junit.jupiter.api.TestMethodOrder;
 
-import static org.assertj.core.api.AssertionsForClassTypes.assertThat;
-import static org.assertj.core.api.AssertionsForClassTypes.assertThatExceptionOfType;
+import java.util.stream.IntStream;
 
 /**
- * A test class for {@link SumOfSquares}
+ * This class allow to calculate a sum of squares of integer number in a certain range. It was implemented using
+ * OO approach. Your job is to refactor it using functional approach. E.g. avoid using mutable variables
  *
  * @author Taras Boychuk
  */
-@TestMethodOrder(MethodOrderer.OrderAnnotation.class)
-class SumOfSquaresTest {
-
-    @Test
-    @Order(1)
-    void calculateSumOfSquaresOfZero() {
-        int sumOfSquares = SumOfSquares.calculateSumOfSquaresInRange(0, 0);
-
-        assertThat(sumOfSquares).isZero();
+public class SumOfSquares {
+    public static void main(String[] args) {
+        System.out.println("Sum of squares from 5 to 10 is " + calculateSumOfSquaresInRange(5, 10));
     }
 
-    @Test
-    @Order(2)
-    void calculateSumOfSquaresOfOne() {
-        int sumOfSquares = SumOfSquares.calculateSumOfSquaresInRange(0, 1);
+    /**
+     * This method calculates the sum of squares of integer in the range
+     *
+     * @param startInclusive first element in range
+     * @param endInclusive   last element in range
+     * @return the sum of squares of each element in the range
+     */
+    static int calculateSumOfSquaresInRange(int startInclusive, int endInclusive) {
+        if (endInclusive < startInclusive) {
+            throw new InvalidRangeException();
+        }
 
-        assertThat(sumOfSquares).isEqualTo(1);
-    }
-
-    @Test
-    @Order(3)
-    void calculateSumOfSquares() {
-        int sumOfSquares = SumOfSquares.calculateSumOfSquaresInRange(1, 5); // 1*1 + 2*2 + 3*3 + 4*4 + 5*5 = 55
-
-        assertThat(sumOfSquares).isEqualTo(55);
-    }
-
-    @Test
-    @Order(4)
-    void calculateSumOfSquaresOnNegative() {
-        int sumOfSquares = SumOfSquares.calculateSumOfSquaresInRange(-4, -2); // -4*(-4) + -3*(-3) + -2*(-2) = 29
-
-        assertThat(sumOfSquares).isEqualTo(29);
-    }
-
-    @Test
-    @Order(5)
-    void calculateWithInvalidRange() {
-        assertThatExceptionOfType(InvalidRangeException.class)
-                .isThrownBy(() -> SumOfSquares.calculateSumOfSquaresInRange(4, 1));
+        return IntStream.rangeClosed(startInclusive, endInclusive)
+                .map(a -> a * a)
+                .sum();
     }
 }
